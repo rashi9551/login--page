@@ -16,21 +16,29 @@
                         <form action="/login" method="post">
                             <div class="form-group">
                                 <label for="username">Username</label>
-                                <input type="text" class="form-control" id="username" name="username">
+                                <input type="text" class="form-control" id="username" name="username" required>
                             </div>
+                        <span><p style="margin-left: 5px; color: rgb(255, 5, 5);">{{unerror}}</p></span>
                             <div class="form-group">
                                 <label for="password">Password</label>
-                                <input type="password" class="form-control" id="password" name="password">
+                                <input type="password" class="form-control" id="password" name="password" required>
                             </div>
+                        <span><p style="margin-left: 5px; color: rgb(255, 5, 5);">{{perror}}</p></span>
                             <button type="submit" class="btn btn-primary">Login</button>
                         </form>
                         <a href="/signup">Create an account signup?</a>
-                        <span><p style="margin-left: 5px; color: rgb(255, 5, 5);">{{perror}}</p></span>
+                        
 
                     </div>
                 </div>
             </div>
         </div>
     </div>
+     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
 
   
