@@ -13,7 +13,9 @@ const userschema = new mongoose.Schema({
   username: String,
   password: String,
 });
+// creating model 
 const adminsModel = new mongoose.model("admins", userschema);
+// authentication checking function 
 function adsignin(req, res, next) {
   if (req.session.isadAuth) {
     next();
@@ -21,7 +23,7 @@ function adsignin(req, res, next) {
     res.redirect("/admin");
   }
 }
-
+// first route 
 adrouter.get("/", async (req, res) => {
   if (req.session.isadAuth) {
     res.redirect("/admin/adhome");
@@ -29,6 +31,8 @@ adrouter.get("/", async (req, res) => {
     res.render("admin");
   }
 });
+
+// admin login route  
 adrouter.post("/adminlogin", async (req, res) => {
   try {
     // email checking
@@ -48,15 +52,17 @@ adrouter.post("/adminlogin", async (req, res) => {
     console.log(error);
   }
 });
-
+// admin logout route 
 adrouter.get("/adminlogout", (req, res) => {
   req.session.isadAuth = false;
   req.session.destroy();
   res.redirect("/admin");
 });
+// admin adduser route 
 adrouter.route("/adduser").get(adsignin, (req, res) => {
   res.render("adduser");
 });
+// admin aduser submission route 
 adrouter.post("/adusersubmit", adsignin, async (req, res) => {
   if (req.session.isadAuth) {
     const emailexist = await usersModel.findOne({ email: req.body.email });
@@ -74,9 +80,8 @@ adrouter.post("/adusersubmit", adsignin, async (req, res) => {
     res.redirect("/admin");
   }
 });
-
-adrouter
-  .route("/adhome")
+// admin home route 
+adrouter.route("/adhome")
   .get(adsignin, async (req, res) => {
     if (req.session.isadAuth) {
       const data = await usersModel.find({});
@@ -116,17 +121,23 @@ adrouter.get("/update/:email", adsignin, async (req, res) => {
 });
 adrouter.post("/update/:email", adsignin, async (req, res) => {
   if (req.session.isadAuth) {
-    const emailexist = await usersModel.findOne({ email: req.body.email });
-    if (emailexist) {
-      res.render("adduser", { emailsexist: "e-mail already exist" });
-    }
     const useremail = req.params.email;
+    const emailexist=await usersModel.findOne({$and:[{email:req.body.email},{email:{$ne:useremail}}]})
+    if(emailexist)
+    {
+      res.render("update",{emailsexist:"Email already exists"})
+    }
+    else
+    {
     await usersModel.updateOne(
       { email: useremail },
       { username: req.body.username, email: req.body.email }
-    );
+    )
     res.redirect("/admin/adhome");
-  } else {
+    }
+  } 
+  else
+  {
     res.redirect("/admin");
   }
 });
